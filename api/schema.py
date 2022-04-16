@@ -29,8 +29,23 @@ class TodoCreateMutation(relay.ClientIDMutation):
 
         return TodoCreateMutation(todo=todo)
 
+class TodoDeleteMutation(relay.ClientIDMutation):
+    class Input:
+        id = graphene.ID(required=True)
+
+    todo = graphene.Field(TodoNode)
+
+    def mutate_and_get_payload(self, info, **input):
+        todo = Todo(
+            id=from_global_id(input.get('id'))[1],
+        )
+        todo.delete()
+
+        return TodoDeleteMutation(todo=None)
+
 class Mutation(graphene.AbstractType):
     create_todo = TodoCreateMutation.Field()
+    delete_todo = TodoDeleteMutation.Field()
 
 class Query(graphene.ObjectType):
     todo = graphene.Field(TodoNode, id=graphene.NonNull(graphene.ID))
