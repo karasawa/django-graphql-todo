@@ -24,6 +24,7 @@ export const GET_ALL_TODOS = gql`
         node {
           id
           task
+          isCompleted
         }
       }
     }
@@ -47,6 +48,18 @@ export const DELETE_TODO = gql`
       todo {
         id
         task
+      }
+    }
+  }
+`;
+
+export const UPDATE_TODO = gql`
+  mutation ($id: ID!, $task: String!, $isCompleted: Boolean!) {
+    updateTodo(input: { id: $id, task: $task, isCompleted: $isCompleted }) {
+      todo {
+        id
+        task
+        isCompleted
       }
     }
   }
