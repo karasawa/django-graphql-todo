@@ -46,7 +46,7 @@ const TodoList = ({ dataTodos }) => {
 
   const checkToggleHandle = async (id, task, isCompleted) => {
     await updateTodo({
-      variables: { id: id, task: task, isCompleted: isCompleted },
+      variables: { id: id, task: task, isCompleted: !isCompleted },
       refetchQueries: [query.GET_ALL_TODOS],
     });
   };

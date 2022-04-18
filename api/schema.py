@@ -59,6 +59,8 @@ class TodoUpdateMutation(relay.ClientIDMutation):
         todo.is_completed = input.get('is_completed')
         todo.save()
 
+        return TodoUpdateMutation(todo=todo)
+
 class Mutation(graphene.AbstractType):
     create_todo = TodoCreateMutation.Field()
     delete_todo = TodoDeleteMutation.Field()
