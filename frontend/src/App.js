@@ -1,5 +1,8 @@
 import Home from "./components/Home";
+import Auth from "./components/Auth";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { CookieProvider } from "react-cookie";
 
 const client = new ApolloClient({
   uri: "http://127.0.0.1:8000/graphql/",
@@ -10,7 +13,12 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <div className="App">
-        <Home />
+        <Router>
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Auth />} />
+          </Routes>
+        </Router>
       </div>
     </ApolloProvider>
   );

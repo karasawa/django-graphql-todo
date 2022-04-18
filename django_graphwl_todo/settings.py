@@ -40,12 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'corsheaders',
+    'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
     'api',
     'account',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -137,6 +139,7 @@ GRAPHENE = {
     ],
 }
 
+
 # AUTHENTICATION_BACKENDS = [
 #     'graphql_jwt.backends.JSONWebTokenBackend',
 #     'django.contrib.auth.backends.ModelBackend',
@@ -146,6 +149,13 @@ GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_EXPIRATION_DELTA:': timedelta(minutes=60),
 }
+
+# GRAPHQL_JWT = {
+#     'JWT_VERIFY_EXPIRATION': True,
+#     'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
+#     'JWT_EXPIRATION_DELTA': timedelta(minutes=5),
+#     'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
+# }
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000"
