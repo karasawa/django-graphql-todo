@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Header from "./Header";
 import Footer from "./Footer";
+import Dialog from "./Dialog";
 
 const AddTodoBox = styled(Box)({
   display: "flex",
@@ -62,6 +63,7 @@ const Home = () => {
           追加
         </Button>
       </AddTodoBox>
+      <Dialog />
       <TodoList dataTodos={dataTodos} />
       <Footer />
     </div>

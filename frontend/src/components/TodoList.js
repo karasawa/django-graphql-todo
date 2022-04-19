@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as query from "../queries";
 import { useMutation } from "@apollo/client";
 import Box from "@mui/material/Box";
@@ -15,6 +15,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Chip from "@mui/material/Chip";
 import { IconButton } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import Dialog from "./Dialog";
 
 const TodoListBox = styled(Box)({
   display: "flex",
@@ -33,6 +35,7 @@ const TodoItemBox = styled(Box)({
 });
 
 const TodoList = ({ dataTodos }) => {
+  const [open, setOpen] = useState(false);
   const [deleteTodo] = useMutation(query.DELETE_TODO);
   const [updateTodo] = useMutation(query.UPDATE_TODO);
   const todos = dataTodos?.allTodos.edges.map((edges) => edges.node);
@@ -49,6 +52,10 @@ const TodoList = ({ dataTodos }) => {
       variables: { id: id, task: task, isCompleted: !isCompleted },
       refetchQueries: [query.GET_ALL_TODOS],
     });
+  };
+
+  const writeMemoHandle = async (id) => {
+    setOpen(true);
   };
 
   return (
@@ -74,6 +81,14 @@ const TodoList = ({ dataTodos }) => {
               </ListItemIcon>
               <ListItemText primary={todo.task} />
               <ListItemSecondaryAction>
+                <IconButton
+                  edge="start"
+                  aria-label="memo"
+                  onClick={() => writeMemoHandle(todo.id)}
+                >
+                  <BorderColorIcon />
+                </IconButton>
+                <Dialog open={open} setOpen={setOpen} task={todo.task} />
                 <IconButton
                   edge="end"
                   aria-label="delete"
