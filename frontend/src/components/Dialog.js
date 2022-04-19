@@ -17,7 +17,7 @@ const style = {
 };
 
 const Dialog = (props) => {
-  const { open, setOpen, task } = props;
+  const { open, setOpen, dialogID } = props;
 
   const handleClose = () => {
     setOpen(false);
@@ -34,7 +34,7 @@ const Dialog = (props) => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            {task}
+            {dialogID}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.

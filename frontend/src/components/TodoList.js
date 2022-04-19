@@ -36,6 +36,7 @@ const TodoItemBox = styled(Box)({
 
 const TodoList = ({ dataTodos }) => {
   const [open, setOpen] = useState(false);
+  const [dialogID, setDialogID] = useState("");
   const [deleteTodo] = useMutation(query.DELETE_TODO);
   const [updateTodo] = useMutation(query.UPDATE_TODO);
   const todos = dataTodos?.allTodos.edges.map((edges) => edges.node);
@@ -56,6 +57,8 @@ const TodoList = ({ dataTodos }) => {
 
   const writeMemoHandle = async (id) => {
     setOpen(true);
+    setDialogID(id);
+    console.log(dialogID);
   };
 
   return (
@@ -88,7 +91,6 @@ const TodoList = ({ dataTodos }) => {
                 >
                   <BorderColorIcon />
                 </IconButton>
-                <Dialog open={open} setOpen={setOpen} task={todo.task} />
                 <IconButton
                   edge="end"
                   aria-label="delete"
@@ -101,6 +103,7 @@ const TodoList = ({ dataTodos }) => {
           </TodoItemBox>
         ))}
       </ul>
+      <Dialog open={open} setOpen={setOpen} dialogID={dialogID} />
     </TodoListBox>
   );
 };
