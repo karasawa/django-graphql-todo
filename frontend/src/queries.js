@@ -25,15 +25,27 @@ export const GET_ALL_TODOS = gql`
           id
           task
           isCompleted
+          memo
         }
       }
     }
   }
 `;
 
+export const GET_TODO = gql`
+  query ($id: ID!) {
+    todo(id: $id) {
+      id
+      task
+      isCompleted
+      memo
+    }
+  }
+`;
+
 export const CREATE_TODO = gql`
-  mutation ($task: String!) {
-    createTodo(input: { task: $task }) {
+  mutation ($task: String!, $memo: String!) {
+    createTodo(input: { task: $task, memo: $memo }) {
       todo {
         id
         task
@@ -54,12 +66,15 @@ export const DELETE_TODO = gql`
 `;
 
 export const UPDATE_TODO = gql`
-  mutation ($id: ID!, $task: String!, $isCompleted: Boolean!) {
-    updateTodo(input: { id: $id, task: $task, isCompleted: $isCompleted }) {
+  mutation ($id: ID!, $task: String!, $isCompleted: Boolean!, $memo: String) {
+    updateTodo(
+      input: { id: $id, task: $task, isCompleted: $isCompleted, memo: $memo }
+    ) {
       todo {
         id
         task
         isCompleted
+        memo
       }
     }
   }

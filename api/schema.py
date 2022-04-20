@@ -18,12 +18,14 @@ class TodoNode(DjangoObjectType):
 class TodoCreateMutation(relay.ClientIDMutation):
     class Input:
         task = graphene.String(required=True)
+        memo = graphene.String(required=True)
 
     todo = graphene.Field(TodoNode)
 
     def mutate_and_get_payload(self, info, **input):
         todo = Todo(
             task=input.get('task'),
+            memo=input.get('memo'),
         )
         todo.save()
 
@@ -48,6 +50,7 @@ class TodoUpdateMutation(relay.ClientIDMutation):
         id = graphene.ID(required=True)
         task = graphene.String(required=True)
         is_completed = graphene.Boolean(required=True)
+        memo = graphene.String(required=False)
 
     todo = graphene.Field(TodoNode)
 
@@ -57,6 +60,7 @@ class TodoUpdateMutation(relay.ClientIDMutation):
         )
         todo.task = input.get('task')
         todo.is_completed = input.get('is_completed')
+        todo.memo = input.get('memo')
         todo.save()
 
         return TodoUpdateMutation(todo=todo)

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as query from "../queries";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -36,10 +36,21 @@ const TodoItemBox = styled(Box)({
 
 const TodoList = ({ dataTodos }) => {
   const [open, setOpen] = useState(false);
-  const [dialogID, setDialogID] = useState("");
+  const [dialogID, setdialogID] = useState("");
   const [deleteTodo] = useMutation(query.DELETE_TODO);
   const [updateTodo] = useMutation(query.UPDATE_TODO);
   const todos = dataTodos?.allTodos.edges.map((edges) => edges.node);
+
+  const [
+    writeMemoHandle,
+    {
+      data: dataSingleTodo,
+      loading: loadingSingleTodo,
+      error: errorSingleTodo,
+    },
+  ] = useLazyQuery(query.GET_TODO, {
+    fetchPolicy: "network-only",
+  });
 
   const deleteTodoHandle = async (id) => {
     await deleteTodo({
@@ -48,18 +59,18 @@ const TodoList = ({ dataTodos }) => {
     });
   };
 
-  const checkToggleHandle = async (id, task, isCompleted) => {
+  const checkToggleHandle = async (id, task, isCompleted, memo) => {
     await updateTodo({
-      variables: { id: id, task: task, isCompleted: !isCompleted },
+      variables: { id: id, task: task, isCompleted: !isCompleted, memo: memo },
       refetchQueries: [query.GET_ALL_TODOS],
     });
   };
 
-  const writeMemoHandle = async (id) => {
-    setOpen(true);
-    setDialogID(id);
-    console.log(dialogID);
-  };
+  // const writeMemoHandle = async (id) => {
+  //   setOpen(true);
+  //   setdialogID(id);
+  //   console.log(dialogID);
+  // };
 
   return (
     <TodoListBox>
@@ -77,7 +88,12 @@ const TodoList = ({ dataTodos }) => {
                 <Checkbox
                   checked={todo.isCompleted}
                   onChange={() =>
-                    checkToggleHandle(todo.id, todo.task, todo.isCompleted)
+                    checkToggleHandle(
+                      todo.id,
+                      todo.task,
+                      todo.isCompleted,
+                      todo.memo
+                    )
                   }
                   Name="checkedA"
                 />
@@ -87,7 +103,16 @@ const TodoList = ({ dataTodos }) => {
                 <IconButton
                   edge="start"
                   aria-label="memo"
-                  onClick={() => writeMemoHandle(todo.id)}
+                  onClick={async () => {
+                    try {
+                      await writeMemoHandle({
+                        variables: { id: todo.id },
+                      });
+                      setOpen(true);
+                    } catch {
+                      console.log(errorSingleTodo);
+                    }
+                  }}
                 >
                   <BorderColorIcon />
                 </IconButton>
@@ -103,7 +128,7 @@ const TodoList = ({ dataTodos }) => {
           </TodoItemBox>
         ))}
       </ul>
-      <Dialog open={open} setOpen={setOpen} dialogID={dialogID} />
+      <Dialog open={open} setOpen={setOpen} dataSingleTodo={dataSingleTodo} />
     </TodoListBox>
   );
 };

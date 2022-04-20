@@ -41,7 +41,7 @@ const Home = () => {
 
   const addTodo = async () => {
     await createTodo({
-      variables: { task: input },
+      variables: { task: input, memo: "" },
       refetchQueries: [query.GET_ALL_TODOS],
     });
     setInput("");
