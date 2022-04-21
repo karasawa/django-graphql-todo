@@ -59,7 +59,12 @@ const Home = () => {
           onChange={(e) => setInput(e.target.value)}
           size="small"
         />
-        <Button variant="contained" onClick={addTodo} style={{ margin: 10 }}>
+        <Button
+          variant="contained"
+          onClick={addTodo}
+          style={{ margin: 10 }}
+          disabled={input.length > 0 ? false : true}
+        >
           追加
         </Button>
       </AddTodoBox>
