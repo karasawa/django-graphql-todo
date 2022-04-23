@@ -22,6 +22,7 @@ class TodoCreateMutation(relay.ClientIDMutation):
         task = graphene.String(required=True)
         memo = graphene.String(required=True)
         user = graphene.String(required=False)
+        deadline = graphene.String(required=False)
 
     todo = graphene.Field(TodoNode)
 
@@ -30,6 +31,7 @@ class TodoCreateMutation(relay.ClientIDMutation):
             task=input.get('task'),
             memo=input.get('memo'),
             user=input.get('user'),
+            deadline=input.get('deadline'),
         )
         todo.save()
 
@@ -56,6 +58,7 @@ class TodoUpdateMutation(relay.ClientIDMutation):
         is_completed = graphene.Boolean(required=True)
         memo = graphene.String(required=False)
         user = graphene.String(required=False)
+        deadline = graphene.String(required=False)
 
     todo = graphene.Field(TodoNode)
 
@@ -67,6 +70,7 @@ class TodoUpdateMutation(relay.ClientIDMutation):
         todo.is_completed = input.get('is_completed')
         todo.memo = input.get('memo')
         todo.user = input.get('user')
+        todo.deadline = input.get('deadline')
         todo.save()
 
         return TodoUpdateMutation(todo=todo)

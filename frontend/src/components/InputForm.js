@@ -8,6 +8,8 @@ import { styled } from "@mui/material/styles";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import Modal from "@mui/material/Modal";
+import { useSetRecoilState } from "recoil";
 
 const AddTodoBox = styled(Box)({
   display: "flex",
@@ -16,15 +18,29 @@ const AddTodoBox = styled(Box)({
   backgroundColor: "white",
   maxWidth: "100%",
   alignItems: "center",
-  padding: 10,
+  padding: 15,
   margin: 1,
 });
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  borderRadius: 2,
+  p: 4,
+};
 
 const InputForm = () => {
   const [input, setInput] = useState("");
   const [createTodo] = useMutation(query.CREATE_TODO);
+  const [deadline, setDeadline] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [memo, setMemo] = useState("");
   const email = localStorage.getItem("email");
-  const [deadline, setDeadline] = useState("");
 
   const addTodo = async () => {
     await createTodo({
@@ -34,36 +50,76 @@ const InputForm = () => {
     setInput("");
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
-      <AddTodoBox component="form" noValidate autoComplete="off">
-        <TextField
-          id="outlined-basic"
-          label="todo"
-          variant="outlined"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          size="small"
-        />
-        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
-            label="Basic example"
-            value={deadline}
-            onChange={(newValue) => {
-              setDeadline(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} size="small" />}
-          />
-        </LocalizationProvider> */}
-        <Button
-          variant="contained"
-          onClick={addTodo}
-          style={{ margin: 10 }}
-          disabled={input.length > 0 ? false : true}
-        >
-          追加
+      <AddTodoBox>
+        <Button variant="contained" onClick={() => setOpen(true)}>
+          Add Todo
         </Button>
       </AddTodoBox>
+      <>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            {/* <Box component="form" noValidate autoComplete="off"> */}
+            <div style={{ margin: 10 }}>
+              <TextField
+                id="outlined-basic"
+                label="todo"
+                variant="outlined"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                size="small"
+                style={{ width: 260 }}
+              />
+            </div>
+            <div style={{ margin: 10 }}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Basic example"
+                  value={deadline}
+                  onChange={(newValue) => {
+                    setDeadline(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} size="small" />
+                  )}
+                />
+              </LocalizationProvider>
+              {/* </Box> */}
+            </div>
+            <div style={{ margin: 10 }}>
+              <TextField
+                id="outlined-multiline-static"
+                multiline
+                rows={2}
+                label="memo"
+                value={memo}
+                onChange={(e) => setMemo(e.target.value)}
+                style={{ width: "100%" }}
+              />
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                onClick={addTodo}
+                style={{ margin: 10 }}
+                disabled={input.length > 0 ? false : true}
+              >
+                追加
+              </Button>
+            </div>
+          </Box>
+        </Modal>
+      </>
     </div>
   );
 };

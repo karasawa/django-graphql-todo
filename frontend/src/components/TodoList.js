@@ -24,7 +24,7 @@ const TodoListBox = styled(Box)({
   backgroundColor: "white",
   maxWidth: "100%",
   alignItems: "center",
-  padding: 10,
+  // padding: 10,
   margin: "auto",
 });
 
