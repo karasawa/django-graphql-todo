@@ -27,13 +27,13 @@ const LoginField = styled(TextField)({
 });
 
 const Auth = () => {
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [getToken] = useMutation(query.GET_TOKEN);
   const [createUser] = useMutation(query.CREATE_USER);
   const navigate = useNavigate();
   // const [cookies, setCookie, removeCookie] = useCookies([]);
+  const [email, setEmail] = useState("");
 
   const authUser = async (e) => {
     e.preventDefault();
@@ -44,13 +44,16 @@ const Auth = () => {
       // await setCookie("token", result.data.tokenAuth.token, { httpOnly: true });
       await localStorage.setItem("token", result.data.tokenAuth.token);
       if (localStorage.getItem("token")) {
+        await localStorage.setItem("email", email);
         navigate("home");
       }
     } else {
       await createUser({
         variables: { password: password, email: email },
       });
-      setIsLogin(true);
+      await setIsLogin(true);
+      await setEmail("");
+      setPassword("");
     }
   };
 

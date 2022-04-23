@@ -5,6 +5,7 @@ from .models import Todo
 from graphene import relay
 from graphql_relay import from_global_id
 from graphql_jwt.decorators import login_required
+from django.contrib.auth import get_user_model
 
 class TodoNode(DjangoObjectType):
     class Meta:
@@ -12,6 +13,7 @@ class TodoNode(DjangoObjectType):
         filter_fields = {
             'task': ['exact', 'icontains'],
             'is_completed': ['exact', 'icontains'],
+            'user': ['exact', 'icontains'],
         }
         interfaces = (relay.Node,)
 
@@ -19,6 +21,7 @@ class TodoCreateMutation(relay.ClientIDMutation):
     class Input:
         task = graphene.String(required=True)
         memo = graphene.String(required=True)
+        user = graphene.String(required=False)
 
     todo = graphene.Field(TodoNode)
 
@@ -26,6 +29,7 @@ class TodoCreateMutation(relay.ClientIDMutation):
         todo = Todo(
             task=input.get('task'),
             memo=input.get('memo'),
+            user=input.get('user'),
         )
         todo.save()
 
@@ -51,6 +55,7 @@ class TodoUpdateMutation(relay.ClientIDMutation):
         task = graphene.String(required=True)
         is_completed = graphene.Boolean(required=True)
         memo = graphene.String(required=False)
+        user = graphene.String(required=False)
 
     todo = graphene.Field(TodoNode)
 
@@ -61,6 +66,7 @@ class TodoUpdateMutation(relay.ClientIDMutation):
         todo.task = input.get('task')
         todo.is_completed = input.get('is_completed')
         todo.memo = input.get('memo')
+        todo.user = input.get('user')
         todo.save()
 
         return TodoUpdateMutation(todo=todo)

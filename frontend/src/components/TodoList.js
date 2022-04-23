@@ -14,6 +14,8 @@ import { IconButton } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import Dialog from "./Dialog";
+import { useRecoilValue } from "recoil";
+import { emailState } from "../atom/authAtom";
 
 const TodoListBox = styled(Box)({
   display: "flex",
@@ -35,7 +37,11 @@ const TodoList = ({ dataTodos }) => {
   const [open, setOpen] = useState(false);
   const [deleteTodo] = useMutation(query.DELETE_TODO);
   const [updateTodo] = useMutation(query.UPDATE_TODO);
-  const todos = dataTodos?.allTodos.edges.map((edges) => edges.node);
+  const email = localStorage.getItem("email");
+  const nodes = dataTodos?.allTodos.edges.map((edges) => edges.node);
+  const todos = nodes.filter((node) => {
+    return node.user === email;
+  });
 
   const [
     writeMemoHandle,
@@ -57,16 +63,16 @@ const TodoList = ({ dataTodos }) => {
 
   const checkToggleHandle = async (id, task, isCompleted, memo) => {
     await updateTodo({
-      variables: { id: id, task: task, isCompleted: !isCompleted, memo: memo },
+      variables: {
+        id: id,
+        task: task,
+        isCompleted: !isCompleted,
+        memo: memo,
+        user: email,
+      },
       refetchQueries: [query.GET_ALL_TODOS],
     });
   };
-
-  // const writeMemoHandle = async (id) => {
-  //   setOpen(true);
-  //   setdialogID(id);
-  //   console.log(dialogID);
-  // };
 
   return (
     <TodoListBox>

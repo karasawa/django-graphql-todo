@@ -5,6 +5,8 @@ import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import * as query from "../queries";
 import { useMutation } from "@apollo/client";
+import { useRecoilValue } from "recoil";
+import { emailState } from "../atom/authAtom";
 
 const style = {
   position: "absolute",
@@ -22,6 +24,7 @@ const Dialog = (props) => {
   const { open, setOpen, dataSingleTodo } = props;
   const [memo, setMemo] = useState("");
   const [updateTodo] = useMutation(query.UPDATE_TODO);
+  const email = localStorage.getItem("email");
 
   useEffect(() => {
     setMemo(dataSingleTodo ? dataSingleTodo.todo.memo : "");
@@ -39,6 +42,7 @@ const Dialog = (props) => {
         task: dataSingleTodo.todo.task,
         isCompleted: dataSingleTodo.todo.isCompleted,
         memo: memo,
+        user: email,
       },
       refetchQueries: [query.GET_ALL_TODOS],
     });
