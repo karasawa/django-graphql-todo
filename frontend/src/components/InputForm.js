@@ -35,7 +35,7 @@ const style = {
 };
 
 const InputForm = () => {
-  const [input, setInput] = useState("");
+  const [task, setTask] = useState("");
   const [createTodo] = useMutation(query.CREATE_TODO);
   const [deadline, setDeadline] = useState(null);
   const [open, setOpen] = useState(false);
@@ -44,10 +44,13 @@ const InputForm = () => {
 
   const addTodo = async () => {
     await createTodo({
-      variables: { task: input, memo: "", user: email },
+      variables: { task: task, memo: memo, user: email, deadline: deadline },
       refetchQueries: [query.GET_ALL_TODOS],
     });
-    setInput("");
+    await setTask("");
+    await setDeadline(null);
+    await setMemo("");
+    setOpen(false);
   };
 
   const handleClose = () => {
@@ -69,14 +72,13 @@ const InputForm = () => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            {/* <Box component="form" noValidate autoComplete="off"> */}
             <div style={{ margin: 10 }}>
               <TextField
                 id="outlined-basic"
-                label="todo"
+                label="task"
                 variant="outlined"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
+                value={task}
+                onChange={(e) => setTask(e.target.value)}
                 size="small"
                 style={{ width: 260 }}
               />
@@ -84,7 +86,7 @@ const InputForm = () => {
             <div style={{ margin: 10 }}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  label="Basic example"
+                  label="deadline"
                   value={deadline}
                   onChange={(newValue) => {
                     setDeadline(newValue);
@@ -94,7 +96,6 @@ const InputForm = () => {
                   )}
                 />
               </LocalizationProvider>
-              {/* </Box> */}
             </div>
             <div style={{ margin: 10 }}>
               <TextField
@@ -112,7 +113,7 @@ const InputForm = () => {
                 variant="contained"
                 onClick={addTodo}
                 style={{ margin: 10 }}
-                disabled={input.length > 0 ? false : true}
+                disabled={task.length > 0 ? false : true}
               >
                 追加
               </Button>

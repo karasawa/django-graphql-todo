@@ -16,6 +16,7 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import Dialog from "./Dialog";
 import { useRecoilValue } from "recoil";
 import { emailState } from "../atom/authAtom";
+import { SettingsBackupRestore } from "@mui/icons-material";
 
 const TodoListBox = styled(Box)({
   display: "flex",
@@ -61,7 +62,7 @@ const TodoList = ({ dataTodos }) => {
     });
   };
 
-  const checkToggleHandle = async (id, task, isCompleted, memo) => {
+  const checkToggleHandle = async (id, task, isCompleted, memo, deadline) => {
     await updateTodo({
       variables: {
         id: id,
@@ -69,6 +70,7 @@ const TodoList = ({ dataTodos }) => {
         isCompleted: !isCompleted,
         memo: memo,
         user: email,
+        deadline: deadline,
       },
       refetchQueries: [query.GET_ALL_TODOS],
     });
@@ -94,13 +96,15 @@ const TodoList = ({ dataTodos }) => {
                       todo.id,
                       todo.task,
                       todo.isCompleted,
-                      todo.memo
+                      todo.memo,
+                      todo.deadline
                     )
                   }
                   Name="checkedA"
                 />
               </ListItemIcon>
               <ListItemText primary={todo.task} />
+              {/* <ListItemText primary={todo.deadline} /> */}
               <ListItemSecondaryAction>
                 <IconButton
                   edge="start"

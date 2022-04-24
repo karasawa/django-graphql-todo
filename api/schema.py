@@ -14,6 +14,7 @@ class TodoNode(DjangoObjectType):
             'task': ['exact', 'icontains'],
             'is_completed': ['exact', 'icontains'],
             'user': ['exact', 'icontains'],
+            'deadline': ['exact', 'icontains'],
         }
         interfaces = (relay.Node,)
 
@@ -22,7 +23,7 @@ class TodoCreateMutation(relay.ClientIDMutation):
         task = graphene.String(required=True)
         memo = graphene.String(required=True)
         user = graphene.String(required=False)
-        deadline = graphene.String(required=False)
+        deadline = graphene.DateTime(required=False, format='%Y-%m-%d')
 
     todo = graphene.Field(TodoNode)
 
@@ -58,7 +59,7 @@ class TodoUpdateMutation(relay.ClientIDMutation):
         is_completed = graphene.Boolean(required=True)
         memo = graphene.String(required=False)
         user = graphene.String(required=False)
-        deadline = graphene.String(required=False)
+        deadline = graphene.DateTime(required=False)
 
     todo = graphene.Field(TodoNode)
 

@@ -29,6 +29,7 @@ export const GET_ALL_TODOS = gql`
           isCompleted
           memo
           user
+          deadline
         }
       }
     }
@@ -42,17 +43,26 @@ export const GET_TODO = gql`
       task
       isCompleted
       memo
+      deadline
     }
   }
 `;
 
 export const CREATE_TODO = gql`
-  mutation ($task: String!, $memo: String!, $user: String) {
-    createTodo(input: { task: $task, memo: $memo, user: $user }) {
+  mutation (
+    $task: String!
+    $memo: String!
+    $user: String
+    $deadline: DateTime
+  ) {
+    createTodo(
+      input: { task: $task, memo: $memo, user: $user, deadline: $deadline }
+    ) {
       todo {
         id
         task
         user
+        deadline
       }
     }
   }
@@ -76,6 +86,7 @@ export const UPDATE_TODO = gql`
     $isCompleted: Boolean!
     $memo: String
     $user: String
+    $deadline: DateTime
   ) {
     updateTodo(
       input: {
@@ -84,6 +95,7 @@ export const UPDATE_TODO = gql`
         isCompleted: $isCompleted
         memo: $memo
         user: $user
+        deadline: $deadline
       }
     ) {
       todo {
@@ -92,6 +104,7 @@ export const UPDATE_TODO = gql`
         isCompleted
         memo
         user
+        deadline
       }
     }
   }

@@ -7,6 +7,9 @@ import * as query from "../queries";
 import { useMutation } from "@apollo/client";
 import { useRecoilValue } from "recoil";
 import { emailState } from "../atom/authAtom";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const style = {
   position: "absolute",
@@ -23,15 +26,18 @@ const style = {
 const Dialog = (props) => {
   const { open, setOpen, dataSingleTodo } = props;
   const [memo, setMemo] = useState("");
+  const [deadline, setDeadline] = useState(null);
   const [updateTodo] = useMutation(query.UPDATE_TODO);
   const email = localStorage.getItem("email");
 
   useEffect(() => {
     setMemo(dataSingleTodo ? dataSingleTodo.todo.memo : "");
+    setDeadline(dataSingleTodo ? dataSingleTodo.todo.deadline : null);
   }, [open]);
 
   const handleClose = () => {
     setMemo("");
+    setDeadline(null);
     setOpen(false);
   };
 
@@ -43,9 +49,12 @@ const Dialog = (props) => {
         isCompleted: dataSingleTodo.todo.isCompleted,
         memo: memo,
         user: email,
+        deadline: deadline,
       },
       refetchQueries: [query.GET_ALL_TODOS],
     });
+    await setMemo("");
+    await setDeadline(null);
     setOpen(false);
   };
 
@@ -58,7 +67,30 @@ const Dialog = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <div>
+          <div style={{ margin: 10 }}>
+            <TextField
+              id="outlined-basic"
+              label="task"
+              variant="outlined"
+              value={dataSingleTodo ? dataSingleTodo.todo.task : ""}
+              size="small"
+              style={{ width: 260 }}
+              disabled
+            />
+          </div>
+          <div style={{ margin: 10 }}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="deadline"
+                value={deadline}
+                onChange={(newValue) => {
+                  setDeadline(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} size="small" />}
+              />
+            </LocalizationProvider>
+          </div>
+          <div style={{ margin: 10 }}>
             <TextField
               id="outlined-multiline-static"
               multiline
@@ -78,9 +110,6 @@ const Dialog = (props) => {
               更新
             </Button>
           </div>
-          {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography> */}
         </Box>
       </Modal>
     </>
