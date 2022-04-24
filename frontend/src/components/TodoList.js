@@ -35,6 +35,10 @@ const TodoItemBox = styled(Box)({
 });
 
 const TodoList = ({ dataTodos }) => {
+  const newYear = new Date().getFullYear();
+  const nowMonth = new Date().getMonth() + 1;
+  const nowDate = new Date().getDate();
+  const today = newYear + "-0" + nowMonth + "-" + nowDate;
   const [open, setOpen] = useState(false);
   const [deleteTodo] = useMutation(query.DELETE_TODO);
   const [updateTodo] = useMutation(query.UPDATE_TODO);
@@ -103,7 +107,12 @@ const TodoList = ({ dataTodos }) => {
                   Name="checkedA"
                 />
               </ListItemIcon>
-              <ListItemText primary={todo.task} />
+              <ListItemText
+                primary={todo.task}
+                style={{
+                  color: today > todo.deadline.toString() ? "black" : "red",
+                }}
+              />
               {/* <ListItemText primary={todo.deadline} /> */}
               <ListItemSecondaryAction>
                 <IconButton

@@ -23,7 +23,7 @@ class TodoCreateMutation(relay.ClientIDMutation):
         task = graphene.String(required=True)
         memo = graphene.String(required=True)
         user = graphene.String(required=False)
-        deadline = graphene.DateTime(required=False, format='%Y-%m-%d')
+        deadline = graphene.DateTime(required=False)
 
     todo = graphene.Field(TodoNode)
 
