@@ -15,8 +15,7 @@ import Checkbox from "@mui/material/Checkbox";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import Dialog from "./Dialog";
 import { useRecoilValue } from "recoil";
-import { emailState } from "../atom/authAtom";
-import { SettingsBackupRestore } from "@mui/icons-material";
+import { taskState, deadlineState, memoState } from "../atom/todoAtom";
 
 const TodoListBox = styled(Box)({
   display: "flex",
@@ -110,7 +109,7 @@ const TodoList = ({ dataTodos }) => {
               <ListItemText
                 primary={todo.task}
                 style={{
-                  color: today > todo.deadline.toString() ? "black" : "red",
+                  color: today > todo.deadline.toString() ? "red" : "black",
                 }}
               />
               {/* <ListItemText primary={todo.deadline} /> */}

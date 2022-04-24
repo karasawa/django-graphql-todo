@@ -9,7 +9,8 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Modal from "@mui/material/Modal";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { taskState, deadlineState, memoState } from "../atom/todoAtom";
 
 const AddTodoBox = styled(Box)({
   display: "flex",
@@ -35,11 +36,11 @@ const style = {
 };
 
 const InputForm = () => {
-  const [task, setTask] = useState("");
   const [createTodo] = useMutation(query.CREATE_TODO);
-  const [deadline, setDeadline] = useState(null);
+  const [task, setTask] = useRecoilState(taskState);
+  const [deadline, setDeadline] = useRecoilState(deadlineState);
+  const [memo, setMemo] = useRecoilState(memoState);
   const [open, setOpen] = useState(false);
-  const [memo, setMemo] = useState("");
   const email = localStorage.getItem("email");
 
   const addTodo = async () => {
@@ -53,14 +54,24 @@ const InputForm = () => {
     setOpen(false);
   };
 
+  const handleOpen = () => {
+    setTask("");
+    setDeadline(null);
+    setMemo("");
+    setOpen(true);
+  };
+
   const handleClose = () => {
+    setTask("");
+    setDeadline(null);
+    setMemo("");
     setOpen(false);
   };
 
   return (
     <div>
       <AddTodoBox>
-        <Button variant="contained" onClick={() => setOpen(true)}>
+        <Button variant="contained" onClick={handleOpen}>
           Add Todo
         </Button>
       </AddTodoBox>

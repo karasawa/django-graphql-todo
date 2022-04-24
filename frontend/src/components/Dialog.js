@@ -5,11 +5,11 @@ import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import * as query from "../queries";
 import { useMutation } from "@apollo/client";
-import { useRecoilValue } from "recoil";
-import { emailState } from "../atom/authAtom";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useRecoilState } from "recoil";
+import { taskState, deadlineState, memoState } from "../atom/todoAtom";
 
 const style = {
   position: "absolute",
@@ -25,8 +25,9 @@ const style = {
 
 const Dialog = (props) => {
   const { open, setOpen, dataSingleTodo } = props;
-  const [memo, setMemo] = useState("");
-  const [deadline, setDeadline] = useState(null);
+  const [task, setTask] = useRecoilState(taskState);
+  const [deadline, setDeadline] = useRecoilState(deadlineState);
+  const [memo, setMemo] = useRecoilState(memoState);
   const [updateTodo] = useMutation(query.UPDATE_TODO);
   const email = localStorage.getItem("email");
 
@@ -35,13 +36,13 @@ const Dialog = (props) => {
     setDeadline(dataSingleTodo ? dataSingleTodo.todo.deadline : null);
   }, [open]);
 
-  const handleClose = () => {
-    setMemo("");
-    setDeadline(null);
+  const handleClose = async () => {
+    await setMemo("");
+    await setDeadline(null);
     setOpen(false);
   };
 
-  const addMemo = async () => {
+  const updateContent = async () => {
     await updateTodo({
       variables: {
         id: dataSingleTodo.todo.id,
@@ -104,7 +105,7 @@ const Dialog = (props) => {
           <div>
             <Button
               variant="contained"
-              onClick={addMemo}
+              onClick={updateContent}
               style={{ margin: 10 }}
             >
               更新

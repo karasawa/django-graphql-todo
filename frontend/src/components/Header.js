@@ -7,11 +7,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 // import { useCookies } from "react-cookie";
 import { useRecoilState } from "recoil";
-import { emailState } from "../atom/authAtom";
 
 const Header = () => {
   // const [cookies, setCookie, removeCookie] = useCookies([]);
-  const [email, setEmail] = useRecoilState(emailState);
   const navigate = useNavigate();
 
   let token;
@@ -28,7 +26,6 @@ const Header = () => {
   const logout = async () => {
     await localStorage.removeItem("token");
     await localStorage.removeItem("email");
-    await setEmail("");
     navigate("/");
   };
 
