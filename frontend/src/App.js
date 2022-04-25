@@ -3,13 +3,7 @@ import Auth from "./components/Auth";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
+import { RecoilRoot } from "recoil";
 
 const client = new ApolloClient({
   uri: "http://127.0.0.1:8000/graphql/",

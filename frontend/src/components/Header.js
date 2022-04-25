@@ -24,6 +24,7 @@ const Header = () => {
 
   const logout = async () => {
     await localStorage.removeItem("token");
+    // await removeCookie("token");
     await localStorage.removeItem("email");
     navigate("/");
   };
@@ -36,9 +37,6 @@ const Header = () => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Todo App
             </Typography>
-            {/* <Button color="inherit" onClick={() => logout()}>
-              ログアウト
-            </Button> */}
             {token}
           </Toolbar>
         </AppBar>

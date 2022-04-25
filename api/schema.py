@@ -5,7 +5,6 @@ from .models import Todo
 from graphene import relay
 from graphql_relay import from_global_id
 from graphql_jwt.decorators import login_required
-from django.contrib.auth import get_user_model
 
 class TodoNode(DjangoObjectType):
     class Meta:

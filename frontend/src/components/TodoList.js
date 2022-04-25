@@ -41,16 +41,10 @@ const TodoList = ({ dataTodos }) => {
     return node.user === email;
   });
 
-  const [
-    writeMemoHandle,
-    {
-      data: dataSingleTodo,
-      loading: loadingSingleTodo,
-      error: errorSingleTodo,
-    },
-  ] = useLazyQuery(query.GET_TODO, {
-    fetchPolicy: "network-only",
-  });
+  const [writeMemoHandle, { data: dataSingleTodo, error: errorSingleTodo }] =
+    useLazyQuery(query.GET_TODO, {
+      fetchPolicy: "network-only",
+    });
 
   const deleteTodoHandle = async (id) => {
     await deleteTodo({

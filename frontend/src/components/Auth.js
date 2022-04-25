@@ -41,7 +41,7 @@ const Auth = () => {
       const result = await getToken({
         variables: { password: password, email: email },
       });
-      // await setCookie("token", result.data.tokenAuth.token, { httpOnly: true });
+      // await setCookie("token", result.data.tokenAuth.token, {httpOnly: true});
       await localStorage.setItem("token", result.data.tokenAuth.token);
       if (localStorage.getItem("token")) {
         await localStorage.setItem("email", email);

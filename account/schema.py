@@ -3,7 +3,6 @@ from graphene_django import DjangoObjectType
 from django.contrib.auth import get_user_model
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene import relay
-from graphql_relay import from_global_id
 from graphql_jwt.decorators import login_required
 import graphql_jwt
 
