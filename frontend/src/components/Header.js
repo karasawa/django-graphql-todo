@@ -6,7 +6,6 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 // import { useCookies } from "react-cookie";
-import { useRecoilState } from "recoil";
 
 const Header = () => {
   // const [cookies, setCookie, removeCookie] = useCookies([]);

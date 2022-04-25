@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -9,7 +9,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useRecoilState } from "recoil";
-import { taskState, deadlineState, memoState } from "../atom/todoAtom";
+import { deadlineState, memoState } from "../atom/todoAtom";
 
 const style = {
   position: "absolute",
@@ -25,7 +25,6 @@ const style = {
 
 const Dialog = (props) => {
   const { open, setOpen, dataSingleTodo } = props;
-  const [task, setTask] = useRecoilState(taskState);
   const [deadline, setDeadline] = useRecoilState(deadlineState);
   const [memo, setMemo] = useRecoilState(memoState);
   const [updateTodo] = useMutation(query.UPDATE_TODO);

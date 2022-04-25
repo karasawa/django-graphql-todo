@@ -14,8 +14,6 @@ import { IconButton } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import Dialog from "./Dialog";
-import { useRecoilValue } from "recoil";
-import { taskState, deadlineState, memoState } from "../atom/todoAtom";
 
 const TodoListBox = styled(Box)({
   display: "flex",
@@ -24,7 +22,6 @@ const TodoListBox = styled(Box)({
   backgroundColor: "white",
   maxWidth: "100%",
   alignItems: "center",
-  // padding: 10,
   margin: "auto",
 });
 
@@ -34,10 +31,7 @@ const TodoItemBox = styled(Box)({
 });
 
 const TodoList = ({ dataTodos }) => {
-  const newYear = new Date().getFullYear();
-  const nowMonth = new Date().getMonth() + 1;
-  const nowDate = new Date().getDate();
-  const today = newYear + "-0" + nowMonth + "-" + nowDate;
+  const today = new Date();
   const [open, setOpen] = useState(false);
   const [deleteTodo] = useMutation(query.DELETE_TODO);
   const [updateTodo] = useMutation(query.UPDATE_TODO);
@@ -109,7 +103,7 @@ const TodoList = ({ dataTodos }) => {
               <ListItemText
                 primary={todo.task}
                 style={{
-                  color: today > todo.deadline.toString() ? "red" : "black",
+                  color: today > todo.deadline ? "red" : "black",
                 }}
               />
               {/* <ListItemText primary={todo.deadline} /> */}
