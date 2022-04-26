@@ -12,7 +12,9 @@ import Modal from "@mui/material/Modal";
 import { useRecoilState } from "recoil";
 import { taskState, deadlineState, memoState } from "../atom/todoAtom";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const AddTodoBox = styled(Box)({
   display: "flex",
@@ -37,6 +39,10 @@ const style = {
   p: 4,
 };
 
+const schema = yup.object().shape({
+  task: yup.string().required("必須項目です"),
+});
+
 const InputForm = () => {
   const [createTodo] = useMutation(query.CREATE_TODO);
   const [task, setTask] = useRecoilState(taskState);
@@ -44,6 +50,13 @@ const InputForm = () => {
   const [memo, setMemo] = useRecoilState(memoState);
   const [open, setOpen] = useState(false);
   const email = localStorage.getItem("email");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const addTodo = async () => {
     await createTodo({
@@ -92,9 +105,13 @@ const InputForm = () => {
           <Box sx={style}>
             <div style={{ margin: 10 }}>
               <TextField
-                id="outlined-basic"
+                id="task"
+                // id="outlined-basic"
                 label="task"
                 variant="outlined"
+                {...register("task")}
+                error={"task" in errors}
+                helperText={errors.task?.message}
                 value={task}
                 onChange={(e) => setTask(e.target.value)}
                 size="small"
@@ -104,7 +121,9 @@ const InputForm = () => {
             <div style={{ margin: 10 }}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
+                  id="deadline"
                   label="deadline"
+                  {...register("deadline")}
                   value={deadline}
                   onChange={(newValue) => {
                     setDeadline(newValue);
@@ -117,10 +136,12 @@ const InputForm = () => {
             </div>
             <div style={{ margin: 10 }}>
               <TextField
-                id="outlined-multiline-static"
+                id="memo"
+                // id="outlined-multiline-static"
                 multiline
                 rows={2}
                 label="memo"
+                {...register("memo")}
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}
                 style={{ width: "100%" }}
@@ -129,7 +150,7 @@ const InputForm = () => {
             <div>
               <Button
                 variant="contained"
-                onClick={addTodo}
+                onClick={handleSubmit(addTodo)}
                 style={{ margin: 10 }}
                 disabled={task.length > 0 ? false : true}
               >

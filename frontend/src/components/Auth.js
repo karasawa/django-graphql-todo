@@ -45,6 +45,13 @@ const Auth = () => {
   const navigate = useNavigate();
   // const [cookies, setCookie, removeCookie] = useCookies([]);
   const [email, setEmail] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const authUser = async (e) => {
     // e.preventDefault();
@@ -67,18 +74,6 @@ const Auth = () => {
       setPassword("");
     }
   };
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-
-  console.log(errors);
-  console.log(email);
-  console.log(password);
 
   return (
     <div>
