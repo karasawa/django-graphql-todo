@@ -1,7 +1,6 @@
 import { useMutation } from "@apollo/client";
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import * as query from "../queries";
-// import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -12,6 +11,7 @@ import { styled } from "@mui/material/styles";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Cookies from "js-cookie";
 
 const LoginBox = styled(Box)({
   display: "flex",
@@ -37,13 +37,12 @@ const schema = yup.object().shape({
   password: yup.string().min(8, "8文字以上で入力してください"),
 });
 
-const Auth = () => {
+const Auth = memo(() => {
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [getToken] = useMutation(query.GET_TOKEN);
   const [createUser] = useMutation(query.CREATE_USER);
   const navigate = useNavigate();
-  // const [cookies, setCookie, removeCookie] = useCookies([]);
   const [email, setEmail] = useState("");
   const {
     register,
@@ -53,15 +52,13 @@ const Auth = () => {
     resolver: yupResolver(schema),
   });
 
-  const authUser = async (e) => {
-    // e.preventDefault();
+  const authUser = async () => {
     if (isLogin) {
       const result = await getToken({
         variables: { password: password, email: email },
       });
-      // await setCookie("token", result.data.tokenAuth.token, {httpOnly: true});
-      await localStorage.setItem("token", result.data.tokenAuth.token);
-      if (localStorage.getItem("token")) {
+      await Cookies.set("token", result.data.tokenAuth.token);
+      if (Cookies.get("token")) {
         await localStorage.setItem("email", email);
         navigate("home");
       }
@@ -85,7 +82,6 @@ const Auth = () => {
               id="email"
               label="email"
               variant="outlined"
-              // type="email"
               size="small"
               {...register("email")}
               error={"email" in errors}
@@ -122,5 +118,5 @@ const Auth = () => {
       <Footer />
     </div>
   );
-};
+});
 export default Auth;

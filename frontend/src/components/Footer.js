@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -14,7 +14,7 @@ const FooterBox = styled(Box)({
   textAlign: "center",
 });
 
-const Footer = () => {
+const Footer = memo(() => {
   return (
     <div>
       <FooterBox>
@@ -28,5 +28,5 @@ const Footer = () => {
       </FooterBox>
     </div>
   );
-};
+});
 export default Footer;

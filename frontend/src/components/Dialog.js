@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -23,7 +23,7 @@ const style = {
   p: 4,
 };
 
-const Dialog = (props) => {
+const Dialog = memo((props) => {
   const { open, setOpen, dataSingleTodo } = props;
   const [deadline, setDeadline] = useRecoilState(deadlineState);
   const [memo, setMemo] = useRecoilState(memoState);
@@ -69,13 +69,13 @@ const Dialog = (props) => {
         <Box sx={style}>
           <div style={{ margin: 10 }}>
             <TextField
-              id="outlined-basic"
+              id="task"
               label="task"
               variant="outlined"
-              value={dataSingleTodo ? dataSingleTodo.todo.task : ""}
               size="small"
               style={{ width: 260 }}
               disabled
+              value={dataSingleTodo ? dataSingleTodo.todo.task : ""}
             />
           </div>
           <div style={{ margin: 10 }}>
@@ -114,5 +114,5 @@ const Dialog = (props) => {
       </Modal>
     </>
   );
-};
+});
 export default Dialog;

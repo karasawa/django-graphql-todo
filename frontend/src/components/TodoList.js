@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import * as query from "../queries";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import Box from "@mui/material/Box";
@@ -30,7 +30,7 @@ const TodoItemBox = styled(Box)({
   justifyContent: "space-between",
 });
 
-const TodoList = ({ dataTodos }) => {
+const TodoList = memo(({ dataTodos }) => {
   const today = new Date();
   const [open, setOpen] = useState(false);
   const [deleteTodo] = useMutation(query.DELETE_TODO);
@@ -133,5 +133,5 @@ const TodoList = ({ dataTodos }) => {
       <Dialog open={open} setOpen={setOpen} dataSingleTodo={dataSingleTodo} />
     </TodoListBox>
   );
-};
+});
 export default TodoList;

@@ -1,18 +1,17 @@
-import React from "react";
+import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-// import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 
-const Header = () => {
-  // const [cookies, setCookie, removeCookie] = useCookies([]);
+const Header = memo(() => {
   const navigate = useNavigate();
 
   let token;
-  if (localStorage.getItem("token")) {
+  if (Cookies.get("token")) {
     token = (
       <Button color="inherit" onClick={() => logout()}>
         ログアウト
@@ -23,8 +22,7 @@ const Header = () => {
   }
 
   const logout = async () => {
-    await localStorage.removeItem("token");
-    // await removeCookie("token");
+    await Cookies.remove("token");
     await localStorage.removeItem("email");
     navigate("/");
   };
@@ -43,5 +41,5 @@ const Header = () => {
       </Box>
     </div>
   );
-};
+});
 export default Header;

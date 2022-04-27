@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, memo } from "react";
 import * as query from "../queries";
 import { useMutation } from "@apollo/client";
 import Box from "@mui/material/Box";
@@ -11,7 +11,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Modal from "@mui/material/Modal";
 import { useRecoilState } from "recoil";
 import { taskState, deadlineState, memoState } from "../atom/todoAtom";
-import { useCookies } from "react-cookie";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -43,7 +42,7 @@ const schema = yup.object().shape({
   task: yup.string().required("必須項目です"),
 });
 
-const InputForm = () => {
+const InputForm = memo(() => {
   const [createTodo] = useMutation(query.CREATE_TODO);
   const [task, setTask] = useRecoilState(taskState);
   const [deadline, setDeadline] = useRecoilState(deadlineState);
@@ -162,5 +161,5 @@ const InputForm = () => {
       </>
     </div>
   );
-};
+});
 export default InputForm;
