@@ -49,6 +49,7 @@ const InputForm = memo(() => {
   const [memo, setMemo] = useRecoilState(memoState);
   const [open, setOpen] = useState(false);
   const email = localStorage.getItem("email");
+
   const {
     register,
     handleSubmit,
@@ -105,7 +106,6 @@ const InputForm = memo(() => {
             <div style={{ margin: 10 }}>
               <TextField
                 id="task"
-                // id="outlined-basic"
                 label="task"
                 variant="outlined"
                 {...register("task")}
@@ -136,7 +136,6 @@ const InputForm = memo(() => {
             <div style={{ margin: 10 }}>
               <TextField
                 id="memo"
-                // id="outlined-multiline-static"
                 multiline
                 rows={2}
                 label="memo"
