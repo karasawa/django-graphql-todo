@@ -1,15 +1,15 @@
 import React, { useEffect, memo } from "react";
+import * as query from "../queries";
+import { useMutation } from "@apollo/client";
+import { useRecoilState } from "recoil";
+import { deadlineState, memoState } from "../atom/todoAtom";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
-import * as query from "../queries";
-import { useMutation } from "@apollo/client";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useRecoilState } from "recoil";
-import { deadlineState, memoState } from "../atom/todoAtom";
 
 const style = {
   position: "absolute",
@@ -25,21 +25,15 @@ const style = {
 
 const Dialog = memo((props) => {
   const { open, setOpen, dataSingleTodo } = props;
+  const [updateTodo] = useMutation(query.UPDATE_TODO);
   const [deadline, setDeadline] = useRecoilState(deadlineState);
   const [memo, setMemo] = useRecoilState(memoState);
-  const [updateTodo] = useMutation(query.UPDATE_TODO);
   const email = localStorage.getItem("email");
 
   useEffect(() => {
     setMemo(dataSingleTodo ? dataSingleTodo.todo.memo : "");
     setDeadline(dataSingleTodo ? dataSingleTodo.todo.deadline : null);
   }, [open]);
-
-  const handleClose = async () => {
-    await setMemo("");
-    await setDeadline(null);
-    setOpen(false);
-  };
 
   const updateContent = async () => {
     await updateTodo({
@@ -53,6 +47,12 @@ const Dialog = memo((props) => {
       },
       refetchQueries: [query.GET_ALL_TODOS],
     });
+    await setMemo("");
+    await setDeadline(null);
+    setOpen(false);
+  };
+
+  const handleClose = async () => {
     await setMemo("");
     await setDeadline(null);
     setOpen(false);
@@ -92,7 +92,7 @@ const Dialog = memo((props) => {
           </div>
           <div style={{ margin: 10 }}>
             <TextField
-              id="outlined-multiline-static"
+              id="memo"
               multiline
               rows={2}
               label="memo"

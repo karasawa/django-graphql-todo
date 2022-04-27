@@ -1,4 +1,5 @@
 import React, { useState, memo } from "react";
+import Dialog from "./Dialog";
 import * as query from "../queries";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import Box from "@mui/material/Box";
@@ -13,7 +14,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import Dialog from "./Dialog";
 
 const TodoListBox = styled(Box)({
   display: "flex",
@@ -31,15 +31,17 @@ const TodoItemBox = styled(Box)({
 });
 
 const TodoList = memo(({ dataTodos }) => {
-  const today = new Date();
-  const [open, setOpen] = useState(false);
   const [deleteTodo] = useMutation(query.DELETE_TODO);
   const [updateTodo] = useMutation(query.UPDATE_TODO);
+  const [open, setOpen] = useState(false);
   const email = localStorage.getItem("email");
+
   const nodes = dataTodos?.allTodos.edges.map((edges) => edges.node);
   const todos = nodes.filter((node) => {
     return node.user === email;
   });
+
+  const today = new Date();
 
   const [writeMemoHandle, { data: dataSingleTodo, error: errorSingleTodo }] =
     useLazyQuery(query.GET_TODO, {

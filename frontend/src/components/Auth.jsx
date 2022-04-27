@@ -1,17 +1,17 @@
-import { useMutation } from "@apollo/client";
 import React, { useState, memo } from "react";
-import * as query from "../queries";
-import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
+import { useMutation } from "@apollo/client";
+import * as query from "../queries";
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Cookies from "js-cookie";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
 
 const LoginBox = styled(Box)({
   display: "flex",
@@ -38,12 +38,13 @@ const schema = yup.object().shape({
 });
 
 const Auth = memo(() => {
-  const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(true);
   const [getToken] = useMutation(query.GET_TOKEN);
   const [createUser] = useMutation(query.CREATE_USER);
-  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,

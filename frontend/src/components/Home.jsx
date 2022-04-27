@@ -1,22 +1,23 @@
 import React, { useEffect, memo } from "react";
 import * as query from "../queries";
-import { useQuery } from "@apollo/client";
 import TodoList from "./TodoList";
 import Header from "./Header";
 import Footer from "./Footer";
 import Dialog from "./Dialog";
 import InputForm from "./InputForm";
+import { useQuery } from "@apollo/client";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Home = memo(() => {
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!Cookies.get("token")) {
       localStorage.removeItem("email");
       navigate("/");
     }
-  }, []);
+  }, [Cookies.get('token')]);
 
   const {
     data: dataTodos,
