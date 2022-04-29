@@ -1,19 +1,17 @@
 import React, { useState, memo } from "react";
-import Dialog from "./Dialog";
-import * as query from "../queries";
+import UpdateDialog from "./UpdateDialog";
+import IsCompletedCheckBox from "../atoms/IsCompletedCheckBox";
+import UpdateDialogOpenButton from "../atoms/UpdateDialogOpenButton";
+import DeleteTodoButton from '../atoms/DeleteTodoButton';
+import * as query from "../../queries";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import {
   ListItemText,
   ListItem,
-  ListItemIcon,
   ListItemSecondaryAction,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 const TodoListBox = styled(Box)({
   display: "flex",
@@ -43,7 +41,7 @@ const TodoList = memo(({ dataTodos }) => {
 
   const today = new Date();
 
-  const [writeMemoHandle, { data: dataSingleTodo, error: errorSingleTodo }] =
+  const [updateTodoHandle, { data: dataSingleTodo, error: errorSingleTodo }] =
     useLazyQuery(query.GET_TODO, {
       fetchPolicy: "network-only",
     });
@@ -81,58 +79,26 @@ const TodoList = memo(({ dataTodos }) => {
         {todos.map((todo) => (
           <TodoItemBox>
             <ListItem key={todo.id}>
-              <ListItemIcon>
-                <Checkbox
-                  checked={todo.isCompleted}
-                  onChange={() =>
-                    checkToggleHandle(
-                      todo.id,
-                      todo.task,
-                      todo.isCompleted,
-                      todo.memo,
-                      todo.deadline
-                    )
-                  }
-                  Name="checkedA"
-                />
-              </ListItemIcon>
+              <IsCompletedCheckBox checkToggleHandle={checkToggleHandle} todo={todo} />
               <ListItemText
                 primary={todo.task}
-                style={{
-                  color: today > todo.deadline ? "red" : "black",
-                }}
+                // style={{
+                //   color: today > todo.deadline ? "red" : "black",
+                // }}
               />
               {/* <ListItemText primary={todo.deadline} /> */}
               <ListItemSecondaryAction>
-                <IconButton
-                  edge="start"
-                  aria-label="memo"
-                  onClick={async () => {
-                    try {
-                      await writeMemoHandle({
-                        variables: { id: todo.id },
-                      });
-                      setOpen(true);
-                    } catch {
-                      console.log(errorSingleTodo);
-                    }
-                  }}
-                >
-                  <BorderColorIcon />
-                </IconButton>
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={() => deleteTodoHandle(todo.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
+                <UpdateDialogOpenButton updateTodoHandle={updateTodoHandle} 
+                                        todo={todo} 
+                                        setOpen={setOpen} 
+                                        errorSingleTodo={errorSingleTodo} />
+                <DeleteTodoButton deleteTodoHandle={deleteTodoHandle} todo={todo} />                        
               </ListItemSecondaryAction>
             </ListItem>
           </TodoItemBox>
         ))}
       </ul>
-      <Dialog open={open} setOpen={setOpen} dataSingleTodo={dataSingleTodo} />
+      <UpdateDialog open={open} setOpen={setOpen} dataSingleTodo={dataSingleTodo} />
     </TodoListBox>
   );
 });

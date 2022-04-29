@@ -1,31 +1,20 @@
 import React, { memo } from "react";
-import { useNavigate } from "react-router-dom";
+import LogOutButton from '../atoms/LogOutButton';
 import Cookies from "js-cookie";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
+
 const Header = memo(() => {
-  const navigate = useNavigate();
 
   let token;
   if (Cookies.get("token")) {
-    token = (
-      <Button color="inherit" onClick={() => logout()}>
-        ログアウト
-      </Button>
-    );
+    token = <LogOutButton />;
   } else {
     token = <></>;
   }
-
-  const logout = async () => {
-    await Cookies.remove("token");
-    await localStorage.removeItem("email");
-    navigate("/");
-  };
 
   return (
     <div>

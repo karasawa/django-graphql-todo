@@ -1,6 +1,8 @@
 import React, { useState, memo } from "react";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "./organisms/Header";
+import Footer from './organisms/Footer';
+import AuthButton from "./atoms/AuthButton";
+import AuthFormField from './molecures/AuthFormField'
 import { useMutation } from "@apollo/client";
 import * as query from "../queries";
 import { useNavigate } from "react-router-dom";
@@ -8,9 +10,8 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Cookies from "js-cookie";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 
 const LoginBox = styled(Box)({
@@ -22,11 +23,6 @@ const LoginBox = styled(Box)({
   height: 660,
   alignItems: "center",
   borderRadius: 1,
-});
-
-const LoginField = styled(TextField)({
-  width: 280,
-  margin: 10,
 });
 
 const schema = yup.object().shape({
@@ -78,38 +74,14 @@ const Auth = memo(() => {
       <Header />
       <form onSubmit={handleSubmit(authUser)}>
         <LoginBox>
+          <AuthFormField register={register} 
+                          errors={errors} 
+                          email={email} 
+                          setEmail={setEmail} 
+                          password={password} 
+                          setPassword={setPassword}/>
           <div>
-            <LoginField
-              id="email"
-              label="email"
-              variant="outlined"
-              size="small"
-              {...register("email")}
-              error={"email" in errors}
-              helperText={errors.email?.message}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-            />
-          </div>
-          <div>
-            <LoginField
-              id="password"
-              label="password"
-              variant="outlined"
-              type="password"
-              size="small"
-              {...register("password")}
-              error={"password" in errors}
-              helperText={errors.password?.message}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div>
-            <Button type="submit">
-              {isLogin ? "Login with JWT" : "Create new user"}
-            </Button>
+            <AuthButton isLogin={isLogin} />
           </div>
           <div>
             <Button onClick={() => setIsLogin(!isLogin)}>switch</Button>
