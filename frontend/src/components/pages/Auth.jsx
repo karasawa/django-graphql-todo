@@ -1,10 +1,10 @@
 import React, { useState, memo } from "react";
-import Header from "./organisms/Header";
-import Footer from './organisms/Footer';
-import AuthButton from "./atoms/AuthButton";
-import AuthFormField from './molecures/AuthFormField'
+import Header from "../organisms/Header";
+import Footer from '../organisms/Footer';
+import AuthButton from "../atoms/AuthButton";
+import AuthFormField from '../molecures/AuthFormField'
 import { useMutation } from "@apollo/client";
-import * as query from "../queries";
+import * as query from "../../queries";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";

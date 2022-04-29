@@ -1,5 +1,5 @@
-import Home from "./components/Home";
-import Auth from "./components/Auth";
+import Home from "./components/pages/Home";
+import Auth from "./components/pages/Auth";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";

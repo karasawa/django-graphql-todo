@@ -39,7 +39,7 @@ const TodoList = memo(({ dataTodos }) => {
     return node.user === email;
   });
 
-  const today = new Date();
+  // const today = new Date();
 
   const [updateTodoHandle, { data: dataSingleTodo, error: errorSingleTodo }] =
     useLazyQuery(query.GET_TODO, {
